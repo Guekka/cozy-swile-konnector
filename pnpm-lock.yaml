@@ -5,13 +5,15 @@ specifiers:
   cozy-konnector-build: 1.4.5
   cozy-konnector-libs: 5.0.0
   puppeteer: ^19.7.2
+  totp-generator: ^0.0.14
 
 dependencies:
-  cozy-konnector-libs: 5.0.0_2b3smjs2ed6wqkrpo3jmdezuku
+  cozy-konnector-libs: 5.0.0_ojk2lnzogiyf2d4f66wr54cu3u
   puppeteer: 19.7.2_typescript@4.9.5
+  totp-generator: 0.0.14
 
 devDependencies:
-  cozy-jobs-cli: 2.0.0_2b3smjs2ed6wqkrpo3jmdezuku
+  cozy-jobs-cli: 2.0.0_ojk2lnzogiyf2d4f66wr54cu3u
   cozy-konnector-build: 1.4.5_eslint@8.35.0
 
 packages:
@@ -2638,8 +2640,8 @@ packages:
       react-zdog: 1.0.11_lbmwfmvgsbmwakgyr33vbqwahe
       zdog: 1.1.3
 
-  /@react-three/fiber/8.11.5_ykgcw7vskdl5ykzth67jkywrle:
-    resolution: {integrity: sha512-Z+/hNPDy71q7xiGQQwngpLhoyjqPsuObs/Wbk2nYDZ0SC6rg3nCQBcIR6cf1+ONx1EP53L5lbuxcr+chkdGGmQ==}
+  /@react-three/fiber/8.12.0_ykgcw7vskdl5ykzth67jkywrle:
+    resolution: {integrity: sha512-o6DkNtNHqcOFRbxaiY5xayelE/9+Z0z9wWu5awqjVbc0c/1QM6AttJH6rKW0U/O6LWxSfxDTARXVzknZqpDJ7A==}
     peerDependencies:
       expo: '>=43.0'
       expo-asset: '>=8.4'
@@ -4778,7 +4780,7 @@ packages:
     dependencies:
       lodash: 4.17.21
 
-  /cozy-doctypes/1.88.0_sgha5tgx7b732sudgw3fg54y3m:
+  /cozy-doctypes/1.88.0_3i6rysy53q62aoawqghytrntum:
     resolution: {integrity: sha512-Em1sRQepA2WSZ4zzWXPKewTpl7FV21CPSSivPQZedSzDSNxe1JA6JanvaF25w7kq5nc+SIRRZH02hv4F0xNbGQ==}
     peerDependencies:
       '@babel/runtime': '>=7.12.5'
@@ -4790,13 +4792,13 @@ packages:
       cozy-client: 35.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-flags: 2.11.0_hyas4tdwp3b266fndcw5kwix4a
       cozy-logger: 1.10.0
-      cozy-stack-client: 33.4.0_cozy-flags@2.11.0
+      cozy-stack-client: 35.3.1_cozy-flags@2.11.0
       date-fns: 1.30.1
       es6-promise-pool: 2.5.0
       lodash: 4.17.21
       prop-types: 15.8.1
 
-  /cozy-doctypes/1.88.0_vloeuluhpfq57737mtz5vl2fai:
+  /cozy-doctypes/1.88.0_i2wwiao5hmjnt2jis3qix74rhu:
     resolution: {integrity: sha512-Em1sRQepA2WSZ4zzWXPKewTpl7FV21CPSSivPQZedSzDSNxe1JA6JanvaF25w7kq5nc+SIRRZH02hv4F0xNbGQ==}
     peerDependencies:
       '@babel/runtime': '>=7.12.5'
@@ -4808,7 +4810,7 @@ packages:
       cozy-client: 33.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-flags: 2.11.0_gbhxgulwn2z7okloyjb76tkshi
       cozy-logger: 1.10.0
-      cozy-stack-client: 33.4.0_cozy-flags@2.11.0
+      cozy-stack-client: 35.3.1_cozy-flags@2.11.0
       date-fns: 1.30.1
       es6-promise-pool: 2.5.0
       lodash: 4.17.21
@@ -4848,7 +4850,7 @@ packages:
       react: 16.14.0
     dev: true
 
-  /cozy-harvest-lib/6.15.2_ge2l6fjbqkqt3gbts3wy6kv6ay:
+  /cozy-harvest-lib/6.15.2_lxfuog3i2sxtihaqfsolvmpt74:
     resolution: {integrity: sha512-kMKEEGJOjGoG60atENheZljaGeK7z6mpEw/yBBa0YE3CLDY5J09IKaUIgS3whp8xeeRrCatAuwVas2Z/9yFqNw==}
     peerDependencies:
       '@babel/runtime': '>=7.12.5'
@@ -4869,7 +4871,7 @@ packages:
       cozy-bi-auth: 0.0.24
       cozy-client: 35.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-device-helper: 2.7.0
-      cozy-doctypes: 1.88.0_sgha5tgx7b732sudgw3fg54y3m
+      cozy-doctypes: 1.88.0_3i6rysy53q62aoawqghytrntum
       cozy-flags: 2.11.0_hyas4tdwp3b266fndcw5kwix4a
       cozy-keys-lib: 4.3.0_mueem263x5dnzx5rvtzb3v2eti
       cozy-logger: 1.10.0
@@ -4901,7 +4903,7 @@ packages:
   /cozy-interapp/0.5.7:
     resolution: {integrity: sha512-laIL/ATYV9oZnmqS+LMoO9qzk8XjJ1v2/YrA1Po2rI8ia/MDgjYO07424x2RuvHhNOBPGjD+JmqwQ0rNDlLW+Q==}
 
-  /cozy-jobs-cli/2.0.0_2b3smjs2ed6wqkrpo3jmdezuku:
+  /cozy-jobs-cli/2.0.0_ojk2lnzogiyf2d4f66wr54cu3u:
     resolution: {integrity: sha512-oVBp7yAZPSaXSk7wFdLYQ3IM9dV9N7A1knpicf/1861C76XD30AG9KBGo0kUVEbTO5TjRIdMD0u6B7ZLE8APSQ==}
     hasBin: true
     dependencies:
@@ -4917,7 +4919,7 @@ packages:
       cozy-client: 29.2.0_jq34ljyvw273wb3tsjfxwlymxe
       cozy-device-helper: 2.7.0
       cozy-flags: 2.11.0_p5sdsglelivlbo7wnau3vduoqe
-      cozy-konnector-libs: 5.0.0_2b3smjs2ed6wqkrpo3jmdezuku
+      cozy-konnector-libs: 5.0.0_ojk2lnzogiyf2d4f66wr54cu3u
       cozy-logger: 1.9.0
       open: 8.4.0
       pretty: 2.0.0
@@ -5001,7 +5003,7 @@ packages:
       - webpack-dev-server
     dev: true
 
-  /cozy-konnector-libs/5.0.0_2b3smjs2ed6wqkrpo3jmdezuku:
+  /cozy-konnector-libs/5.0.0_ojk2lnzogiyf2d4f66wr54cu3u:
     resolution: {integrity: sha512-wxVR9MH+UUx81osQGet1m/o6rOP98S4u0xMomWDASw8xlvvj8D1zp18M7F+zxKhZAb9L8Y+4D54vD5HQhgyoOw==}
     peerDependencies:
       pdfjs: ^2.3.0
@@ -5024,7 +5026,7 @@ packages:
       cozy-client: 33.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-client-js: 0.20.0_babel-polyfill@6.26.0
       cozy-device-helper: 2.7.0
-      cozy-doctypes: 1.88.0_vloeuluhpfq57737mtz5vl2fai
+      cozy-doctypes: 1.88.0_i2wwiao5hmjnt2jis3qix74rhu
       cozy-flags: 2.11.0_gbhxgulwn2z7okloyjb76tkshi
       cozy-logger: 1.10.0
       date-fns: 2.29.3
@@ -5075,7 +5077,7 @@ packages:
       cozy-client: 35.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-device-helper: 1.18.0
 
-  /cozy-sharing/3.12.10_djaco3fut6o4fvcs6csdzn6riy:
+  /cozy-sharing/3.12.10_i2byn3q7danhfb4ppusd5p7ihu:
     resolution: {integrity: sha512-tVwgudh4aM9sFhMC55HnkWbSpwtEqP1XBFPlnZ19uOfiheLfW0qrKfF+B18ypMikRKo0oUjZPNDOh+qE0wuqqQ==}
     peerDependencies:
       '@material-ui/core': '4'
@@ -5091,7 +5093,7 @@ packages:
       copy-text-to-clipboard: 2.2.0
       cozy-client: 35.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-device-helper: 1.18.0
-      cozy-doctypes: 1.88.0_sgha5tgx7b732sudgw3fg54y3m
+      cozy-doctypes: 1.88.0_3i6rysy53q62aoawqghytrntum
       cozy-realtime: 3.14.4_cozy-client@35.4.0
       cozy-ui: 81.3.0_umoalfvctxmkgluxpfybmz4io4
       lodash: 4.17.21
@@ -5122,7 +5124,7 @@ packages:
     peerDependencies:
       cozy-flags: '>2.8.6'
     dependencies:
-      cozy-flags: 2.11.0_hyas4tdwp3b266fndcw5kwix4a
+      cozy-flags: 2.11.0_gbhxgulwn2z7okloyjb76tkshi
       detect-node: 2.1.0
       mime: 2.6.0
       qs: 6.11.0
@@ -5159,10 +5161,10 @@ packages:
       classnames: 2.3.2
       cozy-client: 35.4.0_qju67cbvkj4bh7dwko3fxaagw4
       cozy-device-helper: 2.7.0
-      cozy-harvest-lib: 6.15.2_ge2l6fjbqkqt3gbts3wy6kv6ay
+      cozy-harvest-lib: 6.15.2_lxfuog3i2sxtihaqfsolvmpt74
       cozy-intent: 2.9.0_react@16.14.0
       cozy-interapp: 0.5.7
-      cozy-sharing: 3.12.10_djaco3fut6o4fvcs6csdzn6riy
+      cozy-sharing: 3.12.10_i2byn3q7danhfb4ppusd5p7ihu
       date-fns: 1.30.1
       filesize: 8.0.7
       hammerjs: 2.0.8
@@ -7657,6 +7659,10 @@ packages:
       is-in-browser: 1.1.3
       tiny-warning: 1.0.3
 
+  /jssha/3.3.0:
+    resolution: {integrity: sha512-w9OtT4ALL+fbbwG3gw7erAO0jvS5nfvrukGPMWIAoea359B26ALXGpzy4YJSp9yGnpUvuvOw1nSjSoHDfWSr1w==}
+    dev: false
+
   /jsx-ast-utils/3.3.3:
     resolution: {integrity: sha512-fYQHZTZ8jSfmWZ0iyzfwiU4WDX4HpHbMCZ3gPlWYiCl3BoeOTsqKBqnTVfH2rYT7eP5c3sVbeSPHnnJOaTrWiw==}
     engines: {node: '>=4.0'}
@@ -9920,7 +9926,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@react-three/fiber': 8.11.5_ykgcw7vskdl5ykzth67jkywrle
+      '@react-three/fiber': 8.12.0_ykgcw7vskdl5ykzth67jkywrle
       react: 16.14.0
       react-dom: 16.14.0_react@16.14.0
       three: 0.150.1
@@ -11183,6 +11189,12 @@ packages:
 
   /toposort/2.0.2:
     resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
+
+  /totp-generator/0.0.14:
+    resolution: {integrity: sha512-vFZ8N2TdF4mCj8bUW460jI73LqS+JKccsZ8cttQSuXa3dkTmZo8q81Pq2yAuiPxCI5fPfUrfaKuU+7adjx5s4w==}
+    dependencies:
+      jssha: 3.3.0
+    dev: false
 
   /tough-cookie/2.5.0:
     resolution: {integrity: sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==}

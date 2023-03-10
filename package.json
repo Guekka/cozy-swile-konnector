@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "cozy-jobs-cli": "2.0.0",
-    "cozy-konnector-build": "1.4.5"
+    "cozy-konnector-build": "1.4.5",
+    "totp-generator": "^0.0.14"
   }
 }
