@@ -37,11 +37,11 @@
   },
   "dependencies": {
     "cozy-konnector-libs": "5.0.0",
-    "puppeteer": "^19.7.2"
+    "puppeteer": "^19.7.2",
+    "totp-generator": "^0.0.14"
   },
   "devDependencies": {
     "cozy-jobs-cli": "2.0.0",
-    "cozy-konnector-build": "1.4.5",
-    "totp-generator": "^0.0.14"
+    "cozy-konnector-build": "1.4.5"
   }
 }
