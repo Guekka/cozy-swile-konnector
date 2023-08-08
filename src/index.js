@@ -1,6 +1,7 @@
 const { log, cozyClient, BaseKonnector, categorize } = require('cozy-konnector-libs')
-const { getPlutusData } = require('./plutus')
+const { getPlutusData, isCredit } = require('./plutus')
 const { getToken } = require('./auth')
+const fs = require('fs')
 const doctypes = require('cozy-doctypes')
 const {
   Document,
@@ -14,6 +15,14 @@ Document.registerClient(cozyClient)
 const reconciliator = new BankingReconciliator({ BankAccount, BankTransaction })
 
 const VENDOR = 'Plutus'
+
+String.prototype.replaceAll = function (strReplace, strWith) {
+  // See http://stackoverflow.com/a/3561711/556609
+  var esc = strReplace.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  var reg = new RegExp(esc, 'ig');
+  return this.replace(reg, strWith);
+};
+
 class PlutusConnector extends BaseKonnector {
   async fetch(fields) {
     log('info', 'Authenticating ...')
@@ -34,9 +43,14 @@ class PlutusConnector extends BaseKonnector {
 
       const accounts = this.getAccounts(cardAccount, baseAccount)
       const transactions = this.getTransactions(rawTransactions, accounts)
+
+      // write to file for debugging
+      fs.writeFileSync('rawTransactions.json', JSON.stringify(rawTransactions, null, 2))
+      fs.writeFileSync('transactions.json', JSON.stringify(transactions, null, 2))
+
       const categorizedTransactions = await categorize(transactions)
 
-      const { accounts: savedAccounts } = await reconciliator.save(accounts, categorizedTransactions)
+      const { accounts: savedAccounts, transactions: savedTransactions } = await reconciliator.save(accounts, categorizedTransactions, { useSplitDate: false })
     } catch (e) {
       log('error', e)
       log('error', e.stack)
@@ -46,7 +60,7 @@ class PlutusConnector extends BaseKonnector {
   /// Plutus has 2 fixed accounts: card and bank. I only use the card account.
   getAccounts(cardAccount, baseAccount) {
     const cozyCardAccount = {
-      "balance": cardAccount.AccountBalance / 100,
+      "balance": cardAccount.AvailableBalance / 100,
       "institutionLabel": VENDOR,
       "label": "Carte Plutus",
       // "iban": not available
@@ -73,17 +87,32 @@ class PlutusConnector extends BaseKonnector {
   }
 
 
+
   getTransactions(transactions, accounts) {
     return transactions.map(transaction => {
       let amount = transaction.transaction_amount / 100
+      // should be clean_description but currently bugged
+
+      console.log(transaction.description)
+
+      // remove "Crv*" and "Crv" from the label, case insensitive
+      let label = transaction.description.replace(/Crv\*?/i, '')
+
+      // Remove ", XX XX 0000" from the label
+      label = label.replace(/, .. .. \d{4}$/, '')
+
+      // Remove ", Vilnius" from the label
+      label = label.replace(', Vilnius', '')
+
+      console.log(label)
       return {
         "vendorId": transaction.transaction_id,
-        "amount": transaction.is_debit ? -amount : amount,
+        "amount": isCredit(transaction) ? amount : -amount,
         "currency": transaction.currency,
-        "date": transaction.date,
+        "date": transaction.local_transaction_date,
         "dateImport": new Date().toISOString(),
         "dateOperation": null,
-        "label": transaction.cleanDescription ?? transaction.description ?? "No description",
+        "label": label,
         "originalBankLabel": transaction.description,
         "vendorAccountId": accounts[0].vendorId,
         "type": transaction.type === "PURCHASE" ? "credit card" : "transfer",

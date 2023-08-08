@@ -25,16 +25,16 @@
   "screenshots": [],
   "permissions": {
     "bank operations": {
-      "type": "io.cozy.bank.operations",
+      "type": "io.cozy.bank.operations"
     },
     "files": {
       "type": "io.cozy.files"
     },
     "bank accounts": {
-      "type": "io.cozy.bank.accounts",
+      "type": "io.cozy.bank.accounts"
     },
     "accounts": {
-      "type": "io.cozy.accounts",
+      "type": "io.cozy.accounts"
     }
   },
   "developer": {

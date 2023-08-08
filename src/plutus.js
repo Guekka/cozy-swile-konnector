@@ -14,7 +14,10 @@ module.exports = {
                 "baseAccount": values[6]
             }
         });
-    }
+    },
+    isCredit: function (transaction) {
+        return ["REFUND", "CARD_DEPOSIT"].includes(transaction.transaction_type);
+    },
 }
 
 function getRequestOptions(token, method, body) {
@@ -34,11 +37,13 @@ function getRequestOptions(token, method, body) {
 
 async function getBaseBalance(token) {
     const raw = `{"operationName":"getBalance","variables":{"currency":"EUR"},"query":"query getBalance($currency: enum_fiat_balance_currency!) {\n  fiat_balance(where: {currency: {_eq: $currency}}) {\n    id\n    user_id\n    currency\n    amount\n    created_at\n    updated_at\n    __typename\n  }\n}\n"}`;
+    return {}
 
     const requestOptions = getRequestOptions(token, 'POST', raw);
 
     return await fetch("https://hasura.plutus.it/v1alpha1/graphql", requestOptions)
         .then(response => response.json())
+        .then(r => { console.log(r); return r })
         .then(jsonResponse => { return jsonResponse.data.fiat_balance[0] })
 }
 
@@ -71,10 +76,10 @@ function _fixStatements(json) {
         "45": "REFUND",
     };
     json.forEach(function (record) {
-        if (record.type in types)
-            record.type = types[record.type];
+        if (record.transaction_type in types)
+            record.transaction_type = types[record.transaction_type];
         else
-            record.type = "UNKNOWN - " + record.type;
+            record.transaction_type = "UNKNOWN - " + record.transaction_type;
     });
     return json
 }
@@ -113,4 +118,5 @@ async function getTransactions(token) {
     return await fetch("https://api.plutus.it/platform/transactions/contis", requestOptions)
         .then(response => response.json())
         .then(jsonResponse => { return jsonResponse; })
+        .then(json => _fixStatements(json))
 }
