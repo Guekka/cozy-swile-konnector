@@ -3,15 +3,15 @@
 
 module.exports = {
     getPlutusData: async function (token) {
-        return await Promise.all([getStatements(token), getRewards(token), getOrders(token), getWithdrawals, getTransactions(token), getCardBalance(token), getBaseBalance(token)]).then(function (values) {
+        return await Promise.all([getStatements(token), getRewards(token), getOrders(token), getWithdrawals, getTransactions(token), getBalance(token), getAccount(token)]).then(function (values) {
             return {
                 "statements": values[0],
                 "rewards": values[1],
                 "orders": values[2],
                 "withdrawals": values[3],
                 "transactions": values[4],
-                "cardAccount": values[5],
-                "baseAccount": values[6]
+                "balance": values[5],
+                "account": values[6]
             }
         });
     },
@@ -24,6 +24,7 @@ function getRequestOptions(token, method, body) {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("referrer", "https://dex.plutus.it");
 
     const requestOptions = {
         method: method,
@@ -35,25 +36,24 @@ function getRequestOptions(token, method, body) {
     return requestOptions;
 }
 
-async function getBaseBalance(token) {
-    const raw = `{"operationName":"getBalance","variables":{"currency":"EUR"},"query":"query getBalance($currency: enum_fiat_balance_currency!) {\n  fiat_balance(where: {currency: {_eq: $currency}}) {\n    id\n    user_id\n    currency\n    amount\n    created_at\n    updated_at\n    __typename\n  }\n}\n"}`;
-    return {}
+async function getBalance(token) {
+    const raw = "{\"operationName\":\"getBalance\",\"variables\":{\"currency\":\"EUR\"},\"query\":\"query getBalance($currency: enum_fiat_balance_currency!) {\\n  fiat_balance(where: {currency: {_eq: $currency}}) {\\n    id\\n    user_id\\n    currency\\n    amount\\n    created_at\\n    updated_at\\n    __typename\\n  }\\n  card_transactions_aggregate(\\n    where: {type: {_eq: \\\"AUTHORISATION\\\"}, status: {_eq: \\\"APPROVED\\\"}}\\n  ) {\\n    aggregate {\\n      sum {\\n        billing_amount\\n        __typename\\n      }\\n      __typename\\n    }\\n    __typename\\n  }\\n}\\n\"}"
 
     const requestOptions = getRequestOptions(token, 'POST', raw);
 
     return await fetch("https://hasura.plutus.it/v1alpha1/graphql", requestOptions)
         .then(response => response.json())
-        .then(r => { console.log(r); return r })
-        .then(jsonResponse => { return jsonResponse.data.fiat_balance[0] })
+        .then(jsonResponse => jsonResponse.data.fiat_balance[0].amount)
 }
 
-async function getCardBalance(token) {
+async function getAccount(token) {
     const requestOptions = getRequestOptions(token, 'GET', null);
 
-    return await fetch("https://api.plutus.it/platform/consumer/balance", requestOptions)
+    return await fetch("https://api.plutus.it/platform/account", requestOptions)
         .then(response => response.json())
-        .then(jsonResponse => { return jsonResponse; })
+        .then(jsonResponse => jsonResponse[0])
 }
+
 
 async function getStatements(token) {
     const raw = "{\"operationName\":\"transactions_view\",\"variables\":{\"offset\":0,\"limit\":null,\"from\":null,\"to\":null},\"query\":\"query transactions_view($offset: Int, $limit: Int, $from: timestamptz, $to: timestamptz) {\\n  transactions_view_aggregate(\\n    where: {_and: [{date: {_gte: $from}}, {date: {_lte: $to}}]}\\n  ) {\\n    aggregate {\\n      totalCount: count\\n      __typename\\n    }\\n    __typename\\n  }\\n  transactions_view(\\n    order_by: {date: desc}\\n    limit: $limit\\n    offset: $offset\\n    where: {_and: [{date: {_gte: $from}}, {date: {_lte: $to}}]}\\n  ) {\\n    id\\n    model\\n    user_id\\n    currency\\n    amount\\n    date\\n    type\\n    is_debit\\n    description\\n    __typename\\n  }\\n}\\n\"}";

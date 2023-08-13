@@ -18,7 +18,7 @@ module.exports = {
 
         await page.waitForTimeout(1000) // wait for the form to be filled
 
-        await form.waitForSelector('button[type="submit"]', { timeout: 2000 }).then(el => el.click())
+        await form.waitForSelector('button[type="submit"]', { timeout: 20000 }).then(el => el.click())
 
         await page.waitForSelector('input[name="code"]', { timeout: 20000 })
 

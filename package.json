@@ -36,7 +36,7 @@
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
-    "cozy-konnector-libs": "5.0.0",
+    "cozy-konnector-libs": "^5.0.0",
     "puppeteer": "^19.7.2",
     "totp-generator": "^0.0.14"
   },
