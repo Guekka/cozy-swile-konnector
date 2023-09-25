@@ -15,9 +15,6 @@ module.exports = {
             }
         });
     },
-    isCredit: function (transaction) {
-        return ["REFUND", "CARD_DEPOSIT"].includes(transaction.transaction_type);
-    },
 }
 
 function getRequestOptions(token, method, body) {
@@ -43,7 +40,11 @@ async function getBalance(token) {
 
     return await fetch("https://hasura.plutus.it/v1alpha1/graphql", requestOptions)
         .then(response => response.json())
-        .then(jsonResponse => jsonResponse.data.fiat_balance[0].amount)
+        .then(jsonResponse => {
+            const balance = jsonResponse.data.fiat_balance[0].amount;
+            const billing = jsonResponse.data.card_transactions_aggregate.aggregate.sum.billing_amount
+            return balance - billing
+        })
 }
 
 async function getAccount(token) {
@@ -67,20 +68,55 @@ async function getStatements(token) {
 }
 
 function _fixStatements(json) {
+    // to simplify, we only consider one account. This means we have to remove transfers from main account to card account
+    // this is for backwards compatibility, as the new Plutus only has one account
+    json = json.filter(op => !["29", "LOAD_PLUTUS_CARD_FROM_CJ_WALLET", "LOAD_PLUTUS_CARD_FROM_WALLET"].includes(op.type));
+
     const types = {
+        // old types
         "0": "PENDING",
         "5": "DECLINED_POS_CHARGE",
-        "29": "CARD_DEPOSIT",
         "31": "PURCHASE",
         "35": "REFUND",
         "45": "REFUND",
+        // new types
+        "AUTHORISATION": "PENDING",
+        "DEPOSIT_FUNDS_RECEIVED": "CARD_DEPOSIT",
+        "CARD_REFUND": "REFUND",
     };
-    json.forEach(function (record) {
-        if (record.transaction_type in types)
-            record.transaction_type = types[record.transaction_type];
+
+    function fixType(record) {
+        if (record.type in types)
+            record.type = types[record.type];
         else
-            record.transaction_type = "UNKNOWN - " + record.transaction_type;
-    });
+            record.type = "UNKNOWN - " + record.type;
+    }
+
+    function fixDescription(record) {
+        if (record.description)
+            return;
+
+        const isDeposit = record.type === "CARD_DEPOSIT";
+        if (isDeposit) {
+            record.description = "Deposit";
+        }
+        else {
+            record.description = "Unknown";
+        }
+    }
+
+    function fixAmount(record) {
+        record.amount = Math.abs(record.amount);
+
+        const isCredit = ["REFUND", "CARD_DEPOSIT", "DEPOSIT_FUNDS_RECEIVED"].includes(record.type);
+        if (!isCredit)
+            record.amount = -record.amount;
+    }
+
+    json.forEach(fixType);
+    json.forEach(fixDescription);
+    json.forEach(fixAmount);
+
     return json
 }
 
@@ -113,10 +149,12 @@ async function getWithdrawals(token) {
 }
 
 async function getTransactions(token) {
-    const requestOptions = getRequestOptions(token, 'GET', null);
+    const raw = "{\"operationName\":\"transactions_view\",\"query\":\"query transactions_view($type: String) {  transactions_view_aggregate {    aggregate {      totalCount: count      __typename    }    __typename  }  transactions_view(order_by: {date: desc}) {    id    model    user_id    currency    amount    date    type    is_debit    description    __typename  }}\"}";
 
-    return await fetch("https://api.plutus.it/platform/transactions/contis", requestOptions)
+    const requestOptions = getRequestOptions(token, 'POST', raw);
+
+    return await fetch("https://hasura.plutus.it/v1alpha1/graphql", requestOptions)
         .then(response => response.json())
-        .then(jsonResponse => { return jsonResponse; })
-        .then(json => _fixStatements(json))
+        .then(json => json.data.transactions_view)
+        .then(_fixStatements)
 }
