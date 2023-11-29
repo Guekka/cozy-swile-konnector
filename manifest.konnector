@@ -1,11 +1,11 @@
 {
   "version": "0.1.0",
-  "name": "Plutus",
+  "name": "Swile",
   "type": "konnector",
   "language": "node",
   "icon": "icon.png",
   "slug": "banks",
-  "source": "git@github.com:Guekka/konnector-plutus.git",
+  "source": "git@github.com:Guekka/konnector-swile.git",
   "categories": ["banking"],
   "fields": {
     "login": {

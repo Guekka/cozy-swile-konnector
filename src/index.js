@@ -1,5 +1,5 @@
 const { log, cozyClient, BaseKonnector, categorize } = require('cozy-konnector-libs')
-const { getPlutusData, isCredit } = require('./plutus')
+const { getSwileData } = require('./swile')
 const { getToken } = require('./auth')
 const doctypes = require('cozy-doctypes')
 const {
@@ -13,26 +13,25 @@ Document.registerClient(cozyClient)
 
 const reconciliator = new BankingReconciliator({ BankAccount, BankTransaction })
 
-const VENDOR = 'Plutus'
+const VENDOR = 'Swile'
 
-class PlutusConnector extends BaseKonnector {
+class SwileConnector extends BaseKonnector {
     async fetch(fields) {
         log('info', 'Authenticating ...')
-        this.jwt = await getToken(this, fields.login, fields.password, fields.totp)
+        this.jwt = await getToken(this, fields.login, fields.password)
         log('info', 'Successfully logged in')
 
         if (this.browser) {
             await this.browser.close();
         }
         try {
-
-            const plutusData = await getPlutusData(this.jwt)
+            const swileData = await getSwileData(this.jwt)
 
             log('info', 'Successfully fetched data')
             log('info', 'Parsing ...')
 
-            const account = this.makeAccount(plutusData.account, plutusData.balance)
-            const transactions = this.getTransactions(plutusData.transactions, account)
+            const account = this.makeAccount(swileData.account)
+            const transactions = this.getTransactions(swileData.transactions, account)
 
             const categorizedTransactions = await categorize(transactions)
 
@@ -43,50 +42,41 @@ class PlutusConnector extends BaseKonnector {
         }
     }
 
-    makeAccount(account, balance) {
+    makeAccount(account) {
         return {
-            "balance": balance,
+            "balance": account.meal_voucher_info.balance.value,
             "institutionLabel": VENDOR,
-            "label": "Plutus Modulr",
-            "iban": account.iban_account,
+            "label": VENDOR,
             "number": String(account.id),
             "type": "bank",
             "idAccount": String(account.id),
             "vendorId": String(account.id),
-            "currency": account.currency,
+            "currency": account.meal_voucher_info.balance.currency.iso_3,
         }
     }
-
-
 
     getTransactions(transactions, account) {
         return transactions.map(transaction => {
             // remove "Crv*" and "Crv" from the label, case insensitive
-            let label = transaction.description.replace(/Crv\*?/i, '')
-
-            // Remove ", XX XX 0000" from the label
-            label = label.replace(/, .. .. \d{4}$/, '')
-
-            // Remove ", Vilnius" from the label
-            label = label.replace(', Vilnius', '')
+            let label = transaction.name.replace(/Crv\*?/i, '')
 
             return {
                 "vendorId": transaction.id,
-                "amount": transaction.amount / 100,
-                "currency": transaction.currency,
+                "amount": transaction.transactions[0].amount.value / 100,
+                "currency": transaction.amount.currency.iso_3,
                 "date": transaction.date,
                 "dateImport": new Date().toISOString(),
                 "dateOperation": null,
                 "label": label,
-                "originalBankLabel": transaction.description,
+                "originalBankLabel": transaction.name,
                 "vendorAccountId": account.vendorId,
-                "type": transaction.type === "PURCHASE" ? "credit card" : "transfer",
+                "type": transaction.display_type === "Payment" ? "credit card" : "transfer",
             }
         })
     }
 }
 
-const connector = new PlutusConnector({
+const connector = new SwileConnector({
     cheerio: false,
     json: false
 })
