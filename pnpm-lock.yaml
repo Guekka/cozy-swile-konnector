@@ -2698,8 +2698,8 @@ packages:
       react-zdog: 1.0.11(react-dom@16.14.0)(react@16.14.0)(zdog@1.1.3)
       zdog: 1.1.3
 
-  /@react-three/fiber@8.15.16(react-dom@16.14.0)(react-native@0.65.3)(react@16.14.0)(three@0.150.1):
-    resolution: {integrity: sha512-4f47K9e2mP8W/guNtu3e2J/Nt6GwKTsX/YP2dktPZRcpHYEsqfXCO8kSfvVMb+lQ8wR0HoFzggqdnGuhZaui0g==}
+  /@react-three/fiber@8.15.19(react-dom@16.14.0)(react-native@0.65.3)(react@16.14.0)(three@0.150.1):
+    resolution: {integrity: sha512-WbFU7T6485v8Onnp+JJnrzKFvvGP7OFyJmHlqXiXc2RcXl9Sax+ykJxiNwEXWjGjcgF9/KTfv0+pAVkP0vZlKg==}
     peerDependencies:
       expo: '>=43.0'
       expo-asset: '>=8.4'
@@ -3480,7 +3480,7 @@ packages:
   /axios@0.21.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.6
     transitivePeerDependencies:
       - debug
 
@@ -5942,8 +5942,8 @@ packages:
   /fluids@0.1.10:
     resolution: {integrity: sha512-66FLmUJOrkvEHIsRVeM+88MG0bjd2TOBuR0BkM0hzyCb68W9drzqeX/AHDNp3ouZALQN7JvBvmKdVhHI+PZsdg==}
 
-  /follow-redirects@1.15.2:
-    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -9211,7 +9211,7 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@react-three/fiber': 8.15.16(react-dom@16.14.0)(react-native@0.65.3)(react@16.14.0)(three@0.150.1)
+      '@react-three/fiber': 8.15.19(react-dom@16.14.0)(react-native@0.65.3)(react@16.14.0)(three@0.150.1)
       react: 16.14.0
       react-dom: 16.14.0(react@16.14.0)
       three: 0.150.1
